@@ -1,0 +1,226 @@
+%\documentclass\{10pt,journal,cspaper,compsoc\}{IEEEtran}
+\documentclass[]{llncs}
+%%%%%%%%%%%
+% Packages
+%%%%%%%%%%%%
+\usepackage[lofdepth,lotdepth]{subfig}
+\usepackage{etex}
+\usepackage[table]{xcolor}
+\usepackage{amssymb,amsmath}
+\usepackage{graphicx}
+%\usepackage{wrapfig}
+\usepackage{mathtools}
+\usepackage{algorithmic}
+\usepackage[vlined,ruled,linesnumbered]{algorithm2e}
+\usepackage{tabularx}
+\usepackage{psfrag,graphics,caption}
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage{pgf}
+\usepackage{epsfig}
+\usepackage{wasysym}
+\usepackage{tikz}
+\usepackage{dot2texi}
+\usepackage{multirow}
+\usepackage[sort,comma,square,numbers]{natbib}
+\usepackage[bookmarks=false, pdftex]{hyperref}
+\usepackage[notcite,notref]{showkeys}
+\usepackage{xspace}
+\usepackage{todonotes}
+%\usepackage{subcaption}
+\usepackage{paralist}
+\usepackage{xspace}
+
+\marginparwidth 0pt\marginparsep 0pt
+\topskip 0pt\headsep 0pt\headheight 0pt
+\oddsidemargin 0pt\evensidemargin 0pt
+\textwidth 6.5in \topmargin 0pt\textheight 9.0in
+
+%%%%%%%%%%%
+% Commandes
+%%%%%%%%%%%
+%\input{commands.tex}
+\renewcommand{\P}{\cal P}
+
+%\newtheorem{construction}{Transformation}
+\newenvironment{bulletitemize}{%
+\renewcommand{\labelitemi}{$\bullet$}%
+\begin{itemize}\end{itemize}}
+
+
+%\newcommand{\cov}[2]{{#1}-{#2}-cover}
+%\newcommand{\pc}[1]{{#1}-path cover}
+%\newcommand{\numpaths}{\ensuremath{\sigma_\mathrm{p}}}
+%\newcommand{\numcycles}{\ensuremath{\sigma_\mathrm{c}}}
+%\newcommand{\lenpaths}{\ensuremath{\ell_\mathrm{p}}}
+%\newcommand{\lencycles}{\ensuremath{\ell_\mathrm{c}}}
+%\newcommand{\lbranch}{\ensuremath{\operatorname{lowbranch}}}
+%\newcommand{\ch}{\ensuremath{C}}
+%\newcommand{\chx}[1]{\ensuremath{c_{#1}}}
+%\newcommand{\parent}{\ensuremath{\operatorname{par}}}
+\newcommand{\np}[1]{\ensuremath{||{#1}||_p}}
+\newcommand{\nc}[1]{\ensuremath{||{#1}||_c}}
+%\newcommand{\graphof}[1]{\ensuremath{\operatorname{Gr}(#1)}}
+\newcommand{\data}[1]{\texttt{#1}\xspace}
+% Figures avec psfrag
+\def \afig#1#2#3 {\begin{figure}\{htbp\}
+\begin{center} 
+\mbox{\psfig{file=#1.eps,width=#3}}
+\end{center}
+\caption{#2}
+\label{fig:#1}
+\end{figure}}
+
+
+
+%\newcommand{\rod}[1]{\par\textcolor{red}{Rod : \textsc{#1}}\par}
+
+\def \bfig#1#2 {\begin{figure}\{hhh\}
+\begin{center} 
+\mbox{\psfig{file=#1.eps}}
+\end{center}
+\caption{#2}
+\label{fig:#1}
+\end{figure}}
+
+
+%\newcommand{\rod}[1]{\par\textcolor{red}{Rod : \textsc{#1}}\par}%\vspace{0.3cm}}
+
+\hyphenation{appro-xi-ma-ble}
+\hyphenation{Scaf-fold}
+
+\def\bbbn{\rm I\!N}
+
+\usepackage{float}
+\floatstyle{plain}
+\newfloat{multialg}{thp}{lop}
+\floatname{multialg}{Algorithm}
+
+
+\input{commands.tex}
+\def\match{\ensuremath{M^*}}
+\newcommand{\papertitle}{Contraints}
+\newcommand{\paperauthors}{Clement Dallard \inst{1}, Eric Bourreau \inst{1},Annie Chateau\inst{1,2}, Rodolphe Giroudeau\inst{1}, }
+\newcommand{\papersubject}{Scaffolding}
+\newcommand{\sizeOf}[1]{{\vert #1 \vert}}
+
+\hypersetup
+{
+bookmarksopen=false,
+pdftitle=\papertitle,
+pdfauthor=\paperauthors, 
+pdfsubject=\papersubject, %subject of the document
+%pdfkeywords="",
+pdftoolbar=false, % toolbar hidden
+pdfmenubar=true, %menubar shown
+pdfhighlight=/O, %effect of clicking on a link
+colorlinks=true, %couleurs sur les liens hypertextes
+pdfpagemode=UseNone, %aucun mode de page
+pdfpagelayout=SinglePage, %ouverture en simple page
+pdffitwindow=true, %pages ouvertes entierement dans toute la fenetre
+linkcolor=linkcol, %couleur des liens hypertextes internes
+citecolor=citecol, %couleur des liens pour les citations
+urlcolor=linkcol %couleur des liens pour les url
+}
+
+\pagestyle{plain}
+
+\title{\papertitle}
+\author{\paperauthors}
+\institute{LIRMM - CNRS UMR 5506 - Montpellier, France  \and IBC - Montpellier, France\\
+\email{$\{$clement.dallard,eric.bourreau,annie.chateau,rodolphe.giroudeau$\}$@lirmm.fr}}
+
+%\pagestyle{plain}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+ This paper presents a simple and fast approach for genome scaffolding, using constraint modeling. We model the scaffolding problem as an optimization problem on a graph built from a paired-end reads alignment on contigs, then describe our modelisation using the super new and efficient graph plug-in for Choco. We tested our approach on a benchmark of various genomes, and compared it with several usual scaffolders. 
+\end{abstract}
+
+
+%\title{CSP for Genome Scaffolding}
+
+%\author{Cl\'ement Dallard\inst{1,2} \and Eric Bourreau\inst{1,2} \and Annie Chateau\inst{1,2,3} \and Rodolphe Giroudeau\inst{1,2}} 
+
+
+\section{Introduction}\label{sec:introduction}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Previous work on scaffolding}\label{sec:soa}
+
+\section{Notation and description of the problem}\label{sec:descr}
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=.6\textwidth]{Weller_Figure_1.pdf}
+\end{center}
+\parbox{.95\textwidth}{\caption{A scaffold graph with 17 contigs (bold edges) and 26 (weighted) links between them, corresponding to the \data{ebola} data set (see \autoref{sec:data}).}\label{fig:scafgraph}}
+\end{figure}
+
+
+\noindent
+%Notice that this model is close to what previous work call scaffold graph, except that this graph is not a directed graph, and contigs are represented by edges instead of vertices. 
+In what follows, we consider $G=(V,E)$ an undirected graph with an even number $2n$ of vertices and without self loops. We suppose that there exists a perfect matching in $G$, denoted by $M^*$. Let $w: E \rightarrow \bbbn$ be a weight function on the edges. In the bioinformatic context, edges in $M^*$ represent contigs, and the other edges figure the ways to link the contigs together, their weight representing the support of each of these hypotheses (e.g. the number of pairs of reads matching on both contigs).
+
+In order to model the genomic structure by fixed numbers of linear (paths) and circular (cycles) chromosomes, the class of considered problems are parameterized by two integers, respectively denoted by $\sigma_p$ and $\sigma_c$. 
+
+\begin{definition}\label{def:bcbp}
+ In the following, we call {\em alternating-cycle} (resp. {\em alternating-path}) in $G$, relatively to a perfect matching %\footnote{represented for instance by a list of $n$ edges $\{2i,2i+1\}$.} 
+ $M^*$ of $G$, a cycle (resp. a path) such that its edges alternatively belong to $M^*$ or not (resp. and where extremal edges belong to $M^*$). The length of a cycle (resp. path) is the number of edges constituting the cycle (resp. path). 
+\end{definition}
+Notice that an alternating-cycle (resp. alternating-path) has necessarily an even number of vertices, at least four (resp. two). The class of the {\sc $(\sigma_p,\sigma_c)-$Scaf\-fold} and {\sc Min/Max$-(\sigma_p,\sigma_c)-$Scaffold Problems} are defined as follows:
+\begin{center}
+\mbox{
+\begin{minipage}{1.0\textwidth}
+{\sc $(\sigma_p,\sigma_c)-$Scaffold Problem (SP)}:\\
+ \textbf{Instance}: Let $G=(V,E)$ be a graph with $2n$ vertices. Let $M^*$ be a perfect
+ matching of $G$, and $(\sigma_p,\sigma_c)  \in \bbbn \times \bbbn \backslash\{(0,0)\}$.\\
+\textbf{Question}: Does it exist a vertex disjoint collection of exactly $\sigma_p$ alternating-paths and $\sigma_c$ alternating-cycles, covering the vertices of $G$? 
+\end{minipage}
+}
+
+\medskip
+\mbox{
+\begin{minipage}{1.0\textwidth}
+{\sc Min/Max-$(\sigma_p,\sigma_c)-$Scaffold Problem}:\\
+ \textbf{Instance}: Let $G=(V,E,w)$ be a graph with $2n$ vertices. Let $M^*$ be a perfect
+ matching of $G$, and $(\sigma_p,\sigma_c)  \in \bbbn \times \bbbn \backslash\{(0,0)\}$.\\
+\textbf{Question}: Find a vertex disjoint collection of exactly $\sigma_p$ alternating-paths and $\sigma_c$ alternating-cycles, covering the vertices of $G$, and of minimal (resp. maximal) total weight. 
+\end{minipage}
+}
+\end{center}
+
+
+\autoref{fig:scafgraph} shows an example of a scaffold graph.
+  
+ The $SP$-problem received much attention in the framework of complexity and approximation \cite{ChateauG15}.In these articles, the authors showed the hardness of $SP$ according to  severals parameters (cycle length, bipartite planar graph, tree,  $\ldots$). Some lowers bounds according to complexity hypothesis ($\mathcal{P} \neq \mathcal{NP}$, $\mathcal{ETH}$)  are proposed using the Gap-reduction, and reduction preserving lower bound in the field of exact exponential time algorithms. In the positive side, some upper bounds with efficient polynomial-time approximation algorithms are designed.  The theoretical aspect of $SP$-problem is completed by the  parameterized  complexity approach in \cite{conf-WCG15} and \cite{algorithmica}. In such context, the authors proposed some negatives results concerning to find a polynomial kernel,  or designing a $\mathcal{FPT}$-algorithm $\ldots$
+
+
+ 
+
+\section{Model and algorithms}\label{sec:pb}
+
+
+
+\section{Experiments}\label{sec:experiments}
+
+
+
+\section{Results}\label{sec:results}
+
+\section{Conclusion and future works}\label{sec:conclusion}
+
+
+\section*{Acknowledgements}
+\label{sec:acknowledgements}
+
+
+\bibliographystyle{unsrt}
+\bibliography{WCB}
+
+\end{document}

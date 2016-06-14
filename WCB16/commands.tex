@@ -1,0 +1,238 @@
+\newcommand{\cov}[2]{{#1}-{#2}-cover}
+\newcommand{\pc}[1]{{#1}-path cover}
+\newcommand{\match}{\ensuremath{M^*}}
+\newcommand{\numpaths}{\ensuremath{\sigma_\mathrm{p}}}
+\newcommand{\numcycles}{\ensuremath{\sigma_\mathrm{c}}}
+\newcommand{\np}{\numpaths}
+\newcommand{\nc}{\numcycles}
+\newcommand{\lenpaths}{\ensuremath{\ell_\mathrm{p}}}
+\newcommand{\lencycles}{\ensuremath{\ell_\mathrm{c}}}
+\newcommand{\lbranch}{\ensuremath{\operatorname{lowbranch}}}
+\newcommand{\ch}{\ensuremath{C}}
+\newcommand{\chx}[1]{\ensuremath{c_{#1}}}
+\newcommand{\parent}{\ensuremath{\operatorname{par}}}
+\newcommand{\graphof}[1]{\ensuremath{\operatorname{Gr}(#1)}}
+\newcommand{\argmin}{\ensuremath{\operatorname{argmin}}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\wmax}{\ensuremath{\w_{\max}}}
+\newcommand{\wmin}{\ensuremath{\w_{\min}}}
+
+\newcommand{\rod}[1]{\par\textcolor{red}{Rod : \textsc{#1}}\par}
+\newcommand{\nini}[1]{\par\textcolor{blue}{Nini : \textsc{#1}}\par}
+\newcommand{\mw}[1]{\todo{\textbf{MW:} #1}}
+
+\usetikzlibrary{arrows,shapes,positioning,calc,decorations.pathreplacing,decorations.markings,decorations.pathmorphing,patterns}
+\pgfdeclarelayer{background2}
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background2,background,main,foreground}
+
+\parskip=-1pt
+
+\tikzstyle{vertex}=[circle, draw, fill=white]
+\tikzstyle{smallvertex}=[circle, draw, fill=white, inner sep=2pt]
+\tikzstyle{edge}=[draw,-]
+\tikzstyle{matching}=[edge,line width=3pt]
+\tikzstyle{solution}=[gray!60, line width=5pt]
+\tikzstyle{arc}=[draw,decoration={markings,mark=at position 1 with {\arrow[scale=2]{latex}}}, postaction={decorate}]
+\tikzstyle{arc}=[draw,-triangle 45]
+\tikzstyle{revarc}=[draw,triangle 45-]
+\tikzstyle{boldarc}=[draw, line width=2pt, -latex]
+\tikzstyle{optional}=[dashed]
+\tikzstyle{path}=[decorate, decoration={snake, amplitude=.6mm}]
+
+% a vertex used in text; the argument contains properties of the vertex (for example \tikzvert{fill=green})
+\newcommand\tikzvert[1]{
+  \raisebox{-.5mm}{
+  \hspace{-2mm}
+  \begin{tikzpicture}
+    \node[vertex, inner sep=.9mm, #1] {};
+  \end{tikzpicture}
+  \hspace{-2mm}
+  }
+}
+
+
+\colorlet{medgray}{gray!75}
+\colorlet{lightgray}{gray!30}
+\definecolor{linkcol}{rgb}{0,0,0.4} 
+\definecolor{citecol}{rgb}{0.5,0,0} 
+
+
+
+\let\emptyset\varnothing
+
+\ifx\backref\undefined
+\else
+% nicer backref links
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{%
+\ifcase #1 %
+(Not cited.)%
+\or
+(Cited on page~#2.)%
+\else
+(Cited on pages~#2.)%
+\fi}
+\renewcommand*{\backrefsep}{, }
+\renewcommand*{\backreftwosep}{ and~}
+\renewcommand*{\backreflastsep}{ and~}
+\fi
+
+% do not break line between Author and year in citations
+\makeatletter
+\def\NAT@spacechar{~}
+\makeatother
+
+% problem command. Syntax: \probdef{input}{question}{full name}{short name}{label}
+\newcommand{\probdef}[5]{
+\hbox{\vbox{
+\begin{quote}
+  \label{#5}
+  \ifthenelse{\equal{#3}{}}{}{{#3}\ifthenelse{\equal{#4}{}}{}{ ({#4})}}
+  \begin{compactdesc}
+    \item [Input:] {#1}
+    \item [Question:] {#2}
+  \end{compactdesc}
+\end{quote}
+}}
+%\newline
+}
+
+% semantics environment
+\newenvironment{semantics}[1]{\noindent{\bf Semantics:} \em #1}
+
+% hiding command
+\newcommand{\raus}[1]{}
+
+% paraproblem command. Syntax: \probdef{input}{question}{parameter}{full name}{short name}{label}
+\newcommand{\paraproblem}[6]{
+\hbox{\vbox{
+\begin{quote}
+  \label{#6}
+  \ifthenelse{\equal{#4}{}}{}{{#4}\ifthenelse{\equal{#5}{}}{}{ ({#5})}}
+&  \begin{compactdesc}
+    \item [Input:] {#1}
+    \item [Question:] {#2}
+    \item [Parameter:] {#3}
+  \end{compactdesc}
+\end{quote}
+}}
+}
+
+\ifx\newdefinition\undefined
+  \let\newdefinition\newtheorem
+\fi
+\ifx\definition\undefined
+  \newdefinition{definition}{Definition}
+  \newtheorem{theorem}{Theorem}
+  \newtheorem{lemma}{Lemma}
+  \newtheorem{proposition}{Proposition}
+  \newtheorem{corollary}{Corollary}
+  \newtheorem{claim}{Claim}
+\fi
+\newtheorem{observation}{Observation}
+\newtheorem{sem}{Semantics}
+\newtheorem{rrule}{Rule}
+\newtheorem{trule}{Tree Rule}
+\newtheorem{prule}{Path Rule}
+\newtheorem{obs}{Observation}
+\newtheorem{transformation}{Transformation}
+\newdefinition{construction}{Construction}
+\newcommand{\rruleautorefname}{Rule}
+\newcommand{\semautorefname}{Semantics}
+\newcommand{\truleautorefname}{Tree Rule}
+\newcommand{\pruleautorefname}{Path Rule}
+\newcommand{\lemmaautorefname}{Lemma}
+\newcommand{\obsautorefname}{Observation}
+\newcommand{\claimautorefname}{Claim}
+\newcommand{\corollaryautorefname}{Corollary}
+\newcommand{\definitionautorefname}{Definition}
+\newcommand{\constructionautorefname}{Construction}
+\newcommand{\propositionautorefname}{Proposition}
+\newcommand{\transformationautorefname}{Transformation}
+\def\algorithmautorefname{Algorithm}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\ifx\qedhere\undefined
+  \newcommand\qedhere{\hfill\qed}
+\fi
+
+
+
+% -------------------- Operators -------------------------
+\newcommand{\w}{\ensuremath{\omega}}
+\newcommand{\mycase}[1]{\textbf{Case~#1:}}
+\newcommand{\poly}{\ensuremath{\operatorname{poly}}}
+\newcommand{\tw}{\ensuremath{\operatorname{tw}}}
+\newcommand{\fes}{\ensuremath{\operatorname{FES}}}
+\newcommand{\cyc}[1]{\ensuremath{#1^{\bigcirc}}}
+\newcommand{\cor}[1]{\ensuremath{#1^{*}}}
+\newcommand{\spl}[1]{\ensuremath{#1^{\dagger}}}
+
+\newcommand{\dist}[2][]{\ensuremath{\operatorname{dist}}\ifx\relax#1\relax\else\ensuremath{_{#1}}\fi\ensuremath{(#2)}}
+\newcommand{\adist}[2][]{\ensuremath{\overline{\operatorname{dist}}}\ifx\relax#1\relax\else\ensuremath{_{#1}}\fi\ensuremath{(#2)}}
+\renewcommand{\deg}[2][]{\ensuremath{\operatorname{deg}}\ifx\relax#1\relax\else\ensuremath{_{#1}}\fi\ensuremath{(#2)}}
+%\newcommand{\np}[2][]{\ensuremath{||{#2}||_p}\ifx\relax#1\relax\else\ensuremath{^{#1}}\fi}
+%\newcommand{\nc}[2][]{\ensuremath{||{#2}||_c}\ifx\relax#1\relax\else\ensuremath{^{#1}}\fi}
+
+\newcommand{\pow}[1]{\ensuremath{2^{#1}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\C}{\ensuremath{\mathcal{C}}} %mathcal C cannot be told apart from normal math C
+\newcommand{\NP}{\ensuremath{\mathcal{NP}}}
+\newcommand{\APX}{\ensuremath{\mathcal{APX}}}
+\newcommand{\FPT}{\ensuremath{\mathcal{FPT}}}
+\def\P{\ensuremath{\mathcal{P}}\xspace}
+\def\A{\ensuremath{\mathfrak{A}}}
+\newcommand{\Hc}{Hamiltonian cycle\xspace}
+
+
+% -------------------- Problems -------------------------
+\newcommand{\SCA}{\textsc{Scaffolding}\xspace}
+\newcommand{\SSCA}{\textsc{Strict Scaffolding}\xspace}
+\newcommand{\MinSCA}{\textsc{Min Scaffolding}\xspace}
+\newcommand{\MaxSCA}{\textsc{Max Scaffolding}\xspace}
+\newcommand{\PRSCA}{\textsc{Path Restricted Scaffolding}\xspace}
+\newcommand{\RSCA}{\textsc{Restricted Scaffolding}\xspace}
+\newcommand{\MRSCA}{\textsc{Bounded-Length Scaffolding}\xspace}
+\newcommand{\HC}{\textsc{Hamiltonian Cycle}\xspace}
+\newcommand{\DHC}{\textsc{Directed Hamiltonian Cycle}\xspace}
+\newcommand{\DHP}{\textsc{Directed Hamiltonian Path}\xspace}
+\newcommand{\ST}{\textsc{Steiner Tree}\xspace}
+\newcommand{\TSAT}{\textsc{3-SAT}\xspace}
+\newcommand{\WTSAT}{\textsc{Weighted 2-SAT}\xspace}
+\newcommand{\WTSATGV}{\textsc{Weighted 2-SAT(GV)}\xspace}
+\newcommand{\MinWTSAT}{\textsc{Min W2SAT}\xspace}
+\newcommand{\MaxWTSAT}{\textsc{Max W2SAT}\xspace}
+\newcommand{\VC}{\textsc{Vertex Cover}\xspace}
+\newcommand{\VCGV}{\textsc{Vertex Cover(GV)}\xspace}
+\newcommand{\IS}{\textsc{Independent Set}\xspace}
+\newcommand{\PIT}{\textsc{Partition Into Triangles}\xspace}
+
+\def\match{\ensuremath{M^*}}
+
+
+\hypersetup
+{
+bookmarksopen=false,
+%pdfkeywords="",
+pdftoolbar=false, % toolbar hidden
+pdfmenubar=true, %menubar shown
+pdfhighlight=/O, %effect of clicking on a link
+colorlinks=true, %couleurs sur les liens hypertextes
+pdfpagemode=UseNone, %aucun mode de page
+pdfpagelayout=SinglePage, %ouverture en simple page
+pdffitwindow=true, %pages ouvertes entierement dans toute la fenetre
+linkcolor=linkcol, %couleur des liens hypertextes internes
+citecolor=citecol, %couleur des liens pour les citations
+urlcolor=linkcol %couleur des liens pour les url
+}
+
+\setlength{\textfloatsep}{0.1cm}
+
+
+% ------------------------ Dense --------------------
+\newcommand{\G}{\ensuremath{\mathfrak{G}}}
+\newcommand{\Sorg}{\ensuremath{S^{\text{org}}}}
+\newcommand{\Xorg}{\ensuremath{X^{\text{org}}}}
+\newcommand{\Sfin}{\ensuremath{\tilde{S}}}
